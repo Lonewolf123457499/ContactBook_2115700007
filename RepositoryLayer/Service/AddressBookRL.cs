@@ -11,9 +11,9 @@ namespace RepositoryLayer.Service
     public class AddressBookRL
     {
         private readonly ApplicationDbContext _context;
-        public AddressBookRL(ApplicationDbContext context) 
-        { 
-            _context = context; 
+        public AddressBookRL(ApplicationDbContext context)
+        {
+            _context = context;
         }
 
         public async Task<List<AddressBookEntry>> GetAllContact()
@@ -49,5 +49,15 @@ namespace RepositoryLayer.Service
         }
 
 
+        public async Task<List<AddressBookEntry>> GetAddressBookEntries(int id)
+        {
+            return await _context.AddressBookEntries
+           .Where(entry => entry.UserId == id)
+           .ToListAsync();
+        }
     }
+
+
+
+    
 }

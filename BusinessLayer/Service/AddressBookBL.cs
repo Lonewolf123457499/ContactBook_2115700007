@@ -40,5 +40,13 @@ namespace BusinessLayer.Service
         {
             await _addressBookRL.DeleteContactById(id);
         }
+
+
+        public async Task<List<AddressBookEntry>> GetAddressBookEntries(int id)
+        {
+            return await _addressBookRL.GetAddressBookEntries(id);
+        }
+
+
     }
 }
