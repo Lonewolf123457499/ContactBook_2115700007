@@ -14,12 +14,14 @@ namespace AddressBook.Controllers
         private readonly ApplicationDbContext dbContext;
         private readonly TokenService tokenService;
         private readonly EmailService emailService;
+        private readonly RabbitMQService rabbitMQService;
 
-        public AuthController(ApplicationDbContext dbContext, TokenService tokenService, EmailService emailService)
+        public AuthController(ApplicationDbContext dbContext, TokenService tokenService, EmailService emailService, RabbitMQService rabbitMQService)
         {
             this.dbContext = dbContext;
             this.tokenService = tokenService;
             this.emailService = emailService;
+            this.rabbitMQService = rabbitMQService;
         }
 
         [HttpPost("register")]
@@ -106,10 +108,22 @@ namespace AddressBook.Controllers
 
             var resetToken = tokenService.GenerateResetToken(user);
 
-            await emailService.SendEmailAsync(user.Email, "Password Reset Request", resetToken);
+            //await emailService.SendEmailAsync(user.Email, "Password Reset Request", resetToken);
+            var message = new
+            {
+                Email = user.Email,
+                Subject = "Password Reset Request",
+                Body = resetToken
+            };
+
+            await rabbitMQService.PublishMessageAsync(message);
+
 
             return Ok(new { message = "Reset password link has been sent to your email." });
         }
+
+
+
 
         [HttpPut("reset-password")]
         public async Task<IActionResult> ResetPassword([FromQuery] string token, [FromBody] ResetPasswordModel model)

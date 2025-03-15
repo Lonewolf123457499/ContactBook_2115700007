@@ -69,6 +69,12 @@ builder.Services.AddScoped<AddressBookRL>();
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<EmailService>();
 
+
+// RabbitMQ Producer and Consumer
+builder.Services.AddSingleton<RabbitMQService>(); // Publisher
+//builder.Services.AddScoped<RabbitMQConsumer>();
+builder.Services.AddHostedService<RabbitMQConsumer>();
+
 // Swagger configuration
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
