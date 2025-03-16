@@ -51,7 +51,7 @@ namespace AddressBook.Controllers
                 Username = user.Username,
                 Password = hashedPassword,
                 Email = user.Email,
-                Role = "Admin" // Use "Admin" to create an admin
+                Role = "User" // Use "Admin" to create an admin
             };
 
             dbContext.Users.Add(newUser);
